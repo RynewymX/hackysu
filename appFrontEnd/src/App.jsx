@@ -9,7 +9,7 @@ export default function VoiceInput() {
   const [language, setLanguage] = useState("es"); // Default language: Spanish
   const recognitionRef = useRef(null); // Persistent speech recognition object
   let sentences = []; // Array to accumulate sentences
-  const [tts, handleTextToSpeech] = useState('')
+  //const [tts, handleTextToSpeech] = useState('')
   // const [languageData, setLanguageData] = useState(""); // Stores translated language data
 
   const handleStartListening = () => {
@@ -77,13 +77,13 @@ export default function VoiceInput() {
   
   
   const handleTranslate = async (text) => {
-    // try {
+     try {
       const response = await axios.post("http://127.0.0.1:8000/translate", { text, language });
       setTranslatedText(response.data.translatedText);
-    // } catch (error) {
-    //   console.error("Error translating text:", error);
-    //   setTranslatedText("Error translating text.");
-    // }
+     } catch (error) {
+       console.error("Error translating text:", error);
+      setTranslatedText("Error translating text.");
+    }
   };
 
   return (
@@ -94,10 +94,10 @@ export default function VoiceInput() {
       <button id="stopVoiceInputBtn" onClick={handleStopListening} disabled={!isListening}>
         End Recording
       </button>
-      <button id='voiceoutputbtn' onclick={handleTextToSpeech} >Click for Text to Speech </button>
+      <button id='voiceoutputbtn' onClick={handleTextToSpeech} >Click for Text to Speech </button>
       <audio controls>
-        <source src="C:\Users\Senior\Documents\GitHub\25-HackYSU\appBackEnd\output.mp3" type="audio/mp3" />
-        Your browser does not support the audio element.
+      <source src="http://127.0.0.1:8000/output.mp3" type="audio/mp3" />
+      Your browser does not support the audio element.
       </audio>
       {/* Display response in a box */}
       <div id="pre-translated">
