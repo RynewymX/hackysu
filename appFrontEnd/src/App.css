@@ -10,7 +10,7 @@
 }
 
 /* Response Box */
-#response-box {
+#response-box, #asl-translated-text {
   margin-top: 15px;
   padding: 10px;
   border: 2px solid #007bff;

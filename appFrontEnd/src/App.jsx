@@ -3,14 +3,14 @@ import axios from "axios";
 
 import "./App.css"; // Import styles
 
-
-
 export default function VoiceInput() {
   const [responseText, setResponseText] = useState(""); // Store backend response
   const [isListening, setIsListening] = useState(false); // Track recording status
   const [translatedText, setTranslatedText] = useState(""); // Store translated text
   const [language, setLanguage] = useState("es"); // Default language: Spanish
+  const [cameraOn, setCameraOn] = useState(false); // Track camera status
   const recognitionRef = useRef(null); // Persistent speech recognition object
+  const videoRef = useRef(null); // Video reference
   let sentences = []; // Array to accumulate sentences
 
   // Function to start speech recognition
@@ -49,47 +49,48 @@ export default function VoiceInput() {
     recognition.start();
   };
 
-  // Function to stop speech recognition and send data as JSON file
+  // Function to stop speech recognition
   const handleStopListening = async () => {
     if (recognitionRef.current) {
       recognitionRef.current.stop();
       setIsListening(false);
     }
-
-    // Send sentences as a JSON file
-    // try {
-      const jsonBlob = new Blob([JSON.stringify(sentences)], { type: "application/json" });
-      const formData = new FormData();
-      formData.append("file", jsonBlob, "sentences.json");
-
-      // Send the JSON file to the backend
-      const response = await axios.post("http://127.0.0.1:8000/upload_json", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-
-      console.log("Backend Response:", response.data);
-      setResponseText(response.data.message || "Sentences processed successfully.");
-    // } catch (error) {
-    //   console.error("Error sending JSON file:", error);
-    //   setResponseText("Error sending JSON file.");
-    // }
   };
 
   // Function to translate text
   const handleTranslate = async (text) => {
-    // try {
+    try {
       const response = await axios.post("http://127.0.0.1:8000/translate", { text, language });
       setTranslatedText(response.data.translatedText);
-    // } catch (error) {
-    //   console.error("Error translating text:", error);
-    //   setTranslatedText("Error translating text.");
-    // }
+    } catch (error) {
+      console.error("Error translating text:", error);
+      setTranslatedText("Error translating text.");
+    }
   };
-  //start of asl scripts
 
-  
-
-  //end of asl scripts
+  // Toggle camera
+  const toggleCamera = async () => {
+    if (cameraOn) {
+      if (videoRef.current && videoRef.current.srcObject) {
+        const tracks = videoRef.current.srcObject.getTracks();
+        tracks.forEach(track => track.stop());
+        videoRef.current.srcObject = null;
+      }
+      setCameraOn(false);
+    } else {
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: "user" } // Invert the webcam
+        });
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+        }
+      } else {
+        alert("Webcam not supported in this browser.");
+      }
+      setCameraOn(true);
+    }
+  };
 
   return (
     <div id="voiceInputContainer">
@@ -108,14 +109,13 @@ export default function VoiceInput() {
           <h3>Original Text</h3>
           <p>{responseText || "Input appears here"}</p>
         </div>
-        
 
         {/* Translated Text Box */}
         <div id="response-box" style={{ flex: 1, border: '1px solid #ccc', padding: '10px', borderRadius: '5px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <h3>Translated Text</h3>
             <select value={language} onChange={(e) => setLanguage(e.target.value)}>
-            <option value="en">English</option>
+              <option value="en">English</option>
               <option value="es">Spanish</option>
               <option value="fr">French</option>
               <option value="de">German</option>
@@ -125,6 +125,24 @@ export default function VoiceInput() {
           <p>{translatedText || "Translation appears here"}</p>
         </div>
       </div>
+
+      <button id="toggleCamera" onClick={toggleCamera} style={{ marginTop: '10px' }}>
+        {cameraOn ? "Turn Off Camera" : "ASL Translator"}
+      </button>
+
+      <div style={{ display: cameraOn ? 'flex' : 'none', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+        <div style={{ display: 'flex', gap: '10px', width: '100%' }}>
+          {/* Webcam Box */}
+          <div style={{ flex: 1, maxWidth: '100%' }}>
+            <video ref={videoRef} autoPlay playsInline style={{ width: '250px', height: '250px', border: '1px solid black', borderRadius: '5px', transform: 'scaleX(-1)' }}></video>
+          </div>
+          {/* ASL Translated Text Box */}
+          <div id="asl-translated-text" style={{ flex: 1, width: '200px', border: '1px solid #ccc', padding: '10px', borderRadius: '5px', height: '200px' }}>
+            <h3>ASL Translation</h3>
+            <p>ASL translation appears here</p>
+          </div>
+        </div>
       </div>
+    </div>
   );
 }
