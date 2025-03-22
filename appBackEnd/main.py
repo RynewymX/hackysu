@@ -21,10 +21,10 @@ translator = Translator()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins (change this for security)
+    allow_origins=["*"],  # Allow only your frontend
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["*"],  # Allow all methods (GET, POST, etc.)
+    allow_headers=["*"],  # Allow all headers
 )
 
 class ButtonClick(BaseModel):
@@ -55,8 +55,9 @@ async def translate_text(request: TranslationRequest):
     if request.language not in LANGUAGES:
         return JSONResponse(content={'translatedText': 'Invalid language code'}, status_code=400)
 
-    translated = await translator.translate(request.text, dest=request.language)  # ✅ Await the async method
-    openai.api_key = "your_api_key_here"
+    translated = await translator.translate(request.text, dest=request.language)
+
+    openai.api_key = "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"
 
     response = openai.audio.speech.create(
         model="tts-1-hd",  # Use "tts-1" or "tts-1-hd" for higher quality
@@ -68,10 +69,11 @@ async def translate_text(request: TranslationRequest):
     with open("output.mp3", "wb") as f:
         f.write(response.content)
     return {'translatedText': translated.text}
-@app.post('/tts')
-async def ttsclick(data:ButtonClick):
+from fastapi.responses import FileResponse
 
-    mp3 = AudioSegment.from_mp3('output.mp3')
+#@app.get("/output.mp3")
+#async def get_audio_file():
+#    return FileResponse("output.mp3", media_type="audio/mp3")
 
 
     
