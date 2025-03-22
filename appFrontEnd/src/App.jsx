@@ -1,19 +1,17 @@
 import { useState, useRef } from "react";
 import axios from "axios";
-
-import "./App.css"; // Import styles
-
-
+import "./App.css"; // Assuming you have some styles
 
 export default function VoiceInput() {
-  const [responseText, setResponseText] = useState(""); // Store backend response
+  const [responseText, setResponseText] = useState(""); // State to store backend response
   const [isListening, setIsListening] = useState(false); // Track recording status
-  const [translatedText, setTranslatedText] = useState(""); // Store translated text
+  const [extraInfo, setExtraInfo] = useState("");
   const [language, setLanguage] = useState("es"); // Default language: Spanish
   const recognitionRef = useRef(null); // Persistent speech recognition object
   let sentences = []; // Array to accumulate sentences
+  const [tts, handleTextToSpeech] = useState('')
+  // const [languageData, setLanguageData] = useState(""); // Stores translated language data
 
-  // Function to start speech recognition
   const handleStartListening = () => {
     if (!("webkitSpeechRecognition" in window)) {
       alert("Your browser does not support Speech Recognition.");
@@ -75,7 +73,9 @@ export default function VoiceInput() {
     // }
   };
 
-  // Function to translate text
+
+  
+  
   const handleTranslate = async (text) => {
     // try {
       const response = await axios.post("http://127.0.0.1:8000/translate", { text, language });
@@ -85,46 +85,42 @@ export default function VoiceInput() {
     //   setTranslatedText("Error translating text.");
     // }
   };
-  //start of asl scripts
-
-  
-
-  //end of asl scripts
 
   return (
+    <div id="mainFunctionBox">
     <div id="voiceInputContainer">
-      <label htmlFor="voiceInputBtn">STT button 👇:</label>
-      <button id="voiceInputBtn" onClick={handleStartListening} disabled={isListening}>
-        {isListening ? "Listening..." : "Start Voice Input"}
-      </button>
-
+      <label htmlFor="voiceInputBtn">Click below:</label>
+      <button id="voiceInputBtn" onClick={handleStartListening}>Voice Input</button>
       <button id="stopVoiceInputBtn" onClick={handleStopListening} disabled={!isListening}>
         End Recording
       </button>
-
-      <div id="response-container" style={{ display: 'flex', gap: '10px' }}>
-        {/* Original Text Box */}
-        <div id="response-box" style={{ flex: 1, border: '1px solid #ccc', padding: '10px', borderRadius: '5px' }}>
-          <h3>Original Text</h3>
-          <p>{responseText || "Input appears here"}</p>
-        </div>
-        
-
-        {/* Translated Text Box */}
-        <div id="response-box" style={{ flex: 1, border: '1px solid #ccc', padding: '10px', borderRadius: '5px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <h3>Translated Text</h3>
-            <select value={language} onChange={(e) => setLanguage(e.target.value)}>
-            <option value="en">English</option>
-              <option value="es">Spanish</option>
-              <option value="fr">French</option>
-              <option value="de">German</option>
-              <option value="it">Italian</option>
-            </select>
-          </div>
-          <p>{translatedText || "Translation appears here"}</p>
-        </div>
+      <button id='voiceoutputbtn' onclick={handleTextToSpeech} >Click for Text to Speech </button>
+      <audio controls>
+        <source src="C:\Users\Senior\Documents\GitHub\25-HackYSU\appBackEnd\output.mp3" type="audio/mp3" />
+        Your browser does not support the audio element.
+      </audio>
+      {/* Display response in a box */}
+      <div id="pre-translated">
+        <p>{setResponseText || "Waiting for response..."}</p>
       </div>
+      <div id='post-translate'>
+        <p>{setExtraInfo || 'waiting for translation'}</p>
       </div>
+    </div>
+    <label htmlFor="languageDropdown">Select Language:</label>
+      <select id="languageDropdown" value={language} onChange={(e) => setLanguage(e.target.data)}>
+        <option id="selector">-- Select a language --</option>
+        <option id='Spanish'>Spanish</option>
+        <option id='French'>French</option>
+        <option id='Russian'>Russian</option>
+        <option id='Japanese'>Japanese</option>
+        <option id='Chinese'>Chinese (Simplified)</option>
+        <option id='Italian'>Italian</option>
+        <option id='german'>German</option>
+
+
+      </select>
+
+    </div>
   );
 }
