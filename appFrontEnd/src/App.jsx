@@ -1,6 +1,9 @@
 import { useState, useRef } from "react";
 import axios from "axios";
+
 import "./App.css"; // Import styles
+
+
 
 export default function VoiceInput() {
   const [responseText, setResponseText] = useState(""); // Store backend response
@@ -82,6 +85,11 @@ export default function VoiceInput() {
     //   setTranslatedText("Error translating text.");
     // }
   };
+  //start of asl scripts
+
+  
+
+  //end of asl scripts
 
   return (
     <div id="voiceInputContainer">
@@ -100,6 +108,7 @@ export default function VoiceInput() {
           <h3>Original Text</h3>
           <p>{responseText || "Input appears here"}</p>
         </div>
+        
 
         {/* Translated Text Box */}
         <div id="response-box" style={{ flex: 1, border: '1px solid #ccc', padding: '10px', borderRadius: '5px' }}>
@@ -111,12 +120,11 @@ export default function VoiceInput() {
               <option value="fr">French</option>
               <option value="de">German</option>
               <option value="it">Italian</option>
-              <option value="jp">Japanese</option>
             </select>
           </div>
           <p>{translatedText || "Translation appears here"}</p>
         </div>
       </div>
-    </div>
+      </div>
   );
 }
