@@ -54,7 +54,7 @@ export default function VoiceInput() {
     }
 
     // Send sentences as a JSON file
-    try {
+    // try {
       const jsonBlob = new Blob([JSON.stringify(sentences)], { type: "application/json" });
       const formData = new FormData();
       formData.append("file", jsonBlob, "sentences.json");
@@ -66,21 +66,21 @@ export default function VoiceInput() {
 
       console.log("Backend Response:", response.data);
       setResponseText(response.data.message || "Sentences processed successfully.");
-    } catch (error) {
-      console.error("Error sending JSON file:", error);
-      setResponseText("Error sending JSON file.");
-    }
+    // } catch (error) {
+    //   console.error("Error sending JSON file:", error);
+    //   setResponseText("Error sending JSON file.");
+    // }
   };
 
   // Function to translate text
   const handleTranslate = async (text) => {
-    try {
+    // try {
       const response = await axios.post("http://127.0.0.1:8000/translate", { text, language });
       setTranslatedText(response.data.translatedText);
-    } catch (error) {
-      console.error("Error translating text:", error);
-      setTranslatedText("Error translating text.");
-    }
+    // } catch (error) {
+    //   console.error("Error translating text:", error);
+    //   setTranslatedText("Error translating text.");
+    // }
   };
 
   return (
