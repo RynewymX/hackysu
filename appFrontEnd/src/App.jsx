@@ -4,12 +4,13 @@ import "./App.css"; // Assuming you have some styles
 
 export default function VoiceInput() {
   const [responseText, setResponseText] = useState(""); // State to store backend response
+  const [translatedText, setTranslatedText] = useState("");
   const [isListening, setIsListening] = useState(false); // Track recording status
   const [extraInfo, setExtraInfo] = useState("");
   const [language, setLanguage] = useState("es"); // Default language: Spanish
   const recognitionRef = useRef(null); // Persistent speech recognition object
   let sentences = []; // Array to accumulate sentences
-  //const [tts, handleTextToSpeech] = useState('')
+  const [tts, handleTextToSpeech] = useState('')
   // const [languageData, setLanguageData] = useState(""); // Stores translated language data
 
   const handleStartListening = () => {
@@ -101,10 +102,10 @@ export default function VoiceInput() {
       </audio>
       {/* Display response in a box */}
       <div id="pre-translated">
-        <p>{setResponseText || "Waiting for response..."}</p>
+        <p>{responseText || "Waiting for response..."}</p>
       </div>
       <div id='post-translate'>
-        <p>{setExtraInfo || 'waiting for translation'}</p>
+        <p>{extraInfo || 'waiting for translation'}</p>
       </div>
     </div>
     <label htmlFor="languageDropdown">Select Language:</label>
