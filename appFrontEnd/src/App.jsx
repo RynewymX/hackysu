@@ -100,15 +100,7 @@ export default function VoiceInput() {
       <source src="http://127.0.0.1:8000/output.mp3" type="audio/mp3" />
       Your browser does not support the audio element.
       </audio>
-      {/* Display response in a box */}
-      <div id="pre-translated">
-        <p>{responseText || "Waiting for response..."}</p>
-      </div>
-      <div id='post-translate'>
-        <p>{translatedText || "Waiting on translation"}</p>
-      </div>
-    </div>
-    <label htmlFor="languageDropdown">Select Language:</label>
+      <label htmlFor="languageDropdown">Select Language:</label>
       <select id="languageDropdown" value={language} onChange={(e) => setLanguage(e.target.value)}>
         <option id='spanish' value='es'>Spanish</option>
         <option id='French'  value='fr'>French</option>
@@ -118,6 +110,14 @@ export default function VoiceInput() {
 
 
       </select>
+      {/* Display response in a box */}
+      <div id="pre-translated">
+        <p>{responseText || "Waiting for response..."}</p>
+      </div>
+      <div id='post-translate'>
+        <p>{translatedText || "Waiting on translation"}</p>
+      </div>
+    </div>
 
     </div>
   );
