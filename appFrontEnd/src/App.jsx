@@ -7,7 +7,7 @@ export default function VoiceInput() {
   const [translatedText, setTranslatedText] = useState("");
   const [isListening, setIsListening] = useState(false); // Track recording status
   const [extraInfo, setExtraInfo] = useState("");
-  const [language, setLanguage] = useState("es"); // Default language: Spanish
+  const [language, setLanguage] = useState(""); // Default language: Spanish
   const recognitionRef = useRef(null); // Persistent speech recognition object
   let sentences = []; // Array to accumulate sentences
   const [tts, handleTextToSpeech] = useState('')
@@ -105,19 +105,16 @@ export default function VoiceInput() {
         <p>{responseText || "Waiting for response..."}</p>
       </div>
       <div id='post-translate'>
-        <p>{extraInfo || 'waiting for translation'}</p>
+        <p>{translatedText || "Waiting on translation"}</p>
       </div>
     </div>
     <label htmlFor="languageDropdown">Select Language:</label>
-      <select id="languageDropdown" value={language} onChange={(e) => setLanguage(e.target.data)}>
-        <option id="selector">-- Select a language --</option>
-        <option id='Spanish'>Spanish</option>
-        <option id='French'>French</option>
-        <option id='Russian'>Russian</option>
-        <option id='Japanese'>Japanese</option>
-        <option id='Chinese'>Chinese (Simplified)</option>
-        <option id='Italian'>Italian</option>
-        <option id='german'>German</option>
+      <select id="languageDropdown" value={language} onChange={(e) => setLanguage(e.target.value)}>
+        <option id='spanish' value='es'>Spanish</option>
+        <option id='French'  value='fr'>French</option>
+        <option id='Russian' value='ru'>Russian</option>
+        <option id='Italian' value='it'>Italian</option>
+        <option id='german' value='de'>German</option>
 
 
       </select>

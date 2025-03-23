@@ -56,8 +56,7 @@ async def translate_text(request: TranslationRequest):
         return JSONResponse(content={'translatedText': 'Invalid language code'}, status_code=400)
 
     translated = await translator.translate(request.text, dest=request.language)
-    translated_tts_text = str(translated) 
-    openai.api_key = "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"
+    # openai.api_key = "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"
 
     # response = openai.audio.speech.create(
     #     model="tts-1-hd",  # Use "tts-1" or "tts-1-hd" for higher quality
