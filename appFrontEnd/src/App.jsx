@@ -10,7 +10,7 @@ export default function VoiceInput() {
   const recognitionRef = useRef(null); // Persistent speech recognition object
   let sentences = []; // Array to accumulate sentences
   const [tts, handleTextToSpeech] = useState('')
-  // const [languageData, setLanguageData] = useState(""); // Stores translated language data
+  const [translatedText, setTranslatedText] = useState(""); // Stores translated language data
 
   const handleStartListening = () => {
     if (!("webkitSpeechRecognition" in window)) {
@@ -94,7 +94,7 @@ export default function VoiceInput() {
       <button id="stopVoiceInputBtn" onClick={handleStopListening} disabled={!isListening}>
         End Recording
       </button>
-      <button id='voiceoutputbtn' onClick={handleTextToSpeech} >Click for Text to Speech </button>
+      {/* <button id='voiceoutputbtn' onClick={handleTextToSpeech} >Click for Text to Speech </button> */}
       {/* <audio controls>
       <source src="http://127.0.0.1:8000/output.mp3" type="audio/mp3" />
       Your browser does not support the audio element.
@@ -104,7 +104,7 @@ export default function VoiceInput() {
         <p>{responseText || "Waiting for response..."}</p>
       </div>
       <div id='post-translate'>
-        <p>{extraInfo || 'waiting for translation'}</p>
+        <p>{translatedText || 'waiting for translation'}</p>
       </div>
     </div>
     <label htmlFor="languageDropdown">Select Language:</label>
