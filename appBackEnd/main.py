@@ -68,7 +68,6 @@ async def translate_text(request: TranslationRequest):
     # # Save the output as an MP3 file
     # with open("output.mp3", "wb") as f:
     #     f.write(response.content)
-    str(translated)
     return {'translatedText': translated.text}
 from fastapi.responses import FileResponse
 
