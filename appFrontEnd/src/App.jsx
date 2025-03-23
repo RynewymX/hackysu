@@ -4,10 +4,9 @@ import "./App.css"; // Assuming you have some styles
 
 export default function VoiceInput() {
   const [responseText, setResponseText] = useState(""); // State to store backend response
-  const [translatedText, setTranslatedText] = useState("");
   const [isListening, setIsListening] = useState(false); // Track recording status
   const [extraInfo, setExtraInfo] = useState("");
-  const [language, setLanguage] = useState(""); // Default language: Spanish
+  const [language, setLanguage] = useState("es"); // Default language: Spanish
   const recognitionRef = useRef(null); // Persistent speech recognition object
   let sentences = []; // Array to accumulate sentences
   const [tts, handleTextToSpeech] = useState('')
@@ -96,28 +95,31 @@ export default function VoiceInput() {
         End Recording
       </button>
       <button id='voiceoutputbtn' onClick={handleTextToSpeech} >Click for Text to Speech </button>
-      <audio controls>
+      {/* <audio controls>
       <source src="http://127.0.0.1:8000/output.mp3" type="audio/mp3" />
       Your browser does not support the audio element.
-      </audio>
-      <label htmlFor="languageDropdown">Select Language:</label>
-      <select id="languageDropdown" value={language} onChange={(e) => setLanguage(e.target.value)}>
-        <option id='spanish' value='es'>Spanish</option>
-        <option id='French'  value='fr'>French</option>
-        <option id='Russian' value='ru'>Russian</option>
-        <option id='Italian' value='it'>Italian</option>
-        <option id='german' value='de'>German</option>
-
-
-      </select>
+      </audio> */}
       {/* Display response in a box */}
       <div id="pre-translated">
         <p>{responseText || "Waiting for response..."}</p>
       </div>
       <div id='post-translate'>
-        <p>{translatedText || "Waiting on translation"}</p>
+        <p>{extraInfo || 'waiting for translation'}</p>
       </div>
     </div>
+    <label htmlFor="languageDropdown">Select Language:</label>
+      <select id="languageDropdown" value={language} onChange={(e) => setLanguage(e.target.data)}>
+        <option id="selector">-- Select a language --</option>
+        <option id='Spanish'>Spanish</option>
+        <option id='French'>French</option>
+        <option id='Russian'>Russian</option>
+        <option id='Japanese'>Japanese</option>
+        <option id='Chinese'>Chinese (Simplified)</option>
+        <option id='Italian'>Italian</option>
+        <option id='german'>German</option>
+
+
+      </select>
 
     </div>
   );
